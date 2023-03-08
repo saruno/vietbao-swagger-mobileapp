@@ -1,0 +1,490 @@
+openapi: 3.0.3
+info:
+  title: VietBao Mobile App API
+  description: |-
+    This is api document for mobile app vietbao.
+    Vietbao website [https://vietbao.vn](https://vietbao.vn)
+
+    Some useful links:
+    - [Vietbao Website](https://vietbao.vn)
+
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://api.vietbao.vn/api/v1
+paths:
+  /home:
+    get:
+      summary: Home
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleSummary'
+  /categories:
+    get:
+      summary: Lấy danh sách chuyên mục
+      description: Lấy tất cả các chuyên mục (Gồm cả category và subcategory) của trang báo. Trừ video
+      operationId: getCategories
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryWithSubCategories'
+
+  /articles/hot:
+    get:
+      summary: Danh sách các bài báo hot
+      description: Danh sách các bài báo hot nhất hiển thị ở đầu trang chủ. Bài ở đầu danh sách sẽ là tin nổi bật nhất hiển thị đầu tiên. Là content hiển thị ở giữa, bên trái và bên phải của trang trủ trên website
+      operationId: getArticlesHot
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleSummary'
+
+  /articles/feature:
+    get:
+      summary: Tin Việt Báo Nổi Bật
+      description: Danh sách các bài báo trong mục Tin Việt Báo Nổi Bật trên website
+      operationId: getArticlesFeature
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleSummary'
+
+  /articles/category/{category_id}:
+    get:
+      summary:  Lấy ds bài theo chủ đề
+      description: Lấy danh sách bài báo theo từng chủ đề (Như trên web là sắp xếp theo mới nhất)
+      operationId: getArticlesByCategory
+      parameters: 
+        - name: category_id
+          in: path
+          description: Id của category
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: number
+          in: query
+          description: Số lượng bài báo muốn lấy trong 1 trang. Mặc định là 7
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start
+          in: query
+          description: Tham số để phân trang. Mặc định = 0. VD number = 7, start = 0 là lấy 7 bài đầu, start = 1 là lấy 7 bài thứ tự từ thứ 8 đến thứ tự thứ 14
+          required: false
+          schema: 
+            type: integer
+            format: int32
+      responses: 
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleSummary'
+  
+  /articles/most_read/category/{category_id}:
+    get:
+      summary:  Lấy ds bài đọc nhiều
+      description: Lấy danh sách bài báo được đọc nhiều nhất của 1 chủ đề
+      operationId: getArticlesMostReadByCategory
+      parameters: 
+        - name: category_id
+          in: path
+          description: Id của category
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses: 
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleSummary'
+
+  /articles/related:
+    get:
+      summary: Lấy ds bài liên quan
+      description: Lấy danh sách bài báo liên quan tới 1 bài báo
+      operationId: getArticlesRelated
+      parameters: 
+        - name: article_id
+          in: query
+          description: Id của bài báo
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: number
+          in: query
+          description: Số lượng bài báo muốn lấy. Mặc định là 5.
+          required: false
+          schema:
+            type: integer
+            format: int32  
+      responses: 
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleSummary'
+  
+  /article/{article_id}:
+    get:
+      summary: Lấy chi tiết bài báo
+      description: Lấy đầy đủ thông tin bài báo
+      operationId: getArticle
+      parameters:
+        - name: article_id
+          in: path
+          description: Id của article
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+      
+  /videos/hot:
+    get:
+      summary: Danh sách video trên trang chủ
+      description: Danh sách các video hot nhất hiển thị trên trang chủ
+      operationId: getVideoHot
+      parameters: 
+        - name: number
+          in: query
+          description: Số lượng video muốn lấy, mặc định là 5
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses: 
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoSummary'
+
+  /video/first:
+    get:
+      summary: Lấy video đầu tiên khi mở tab video
+      description: Video đầu tiên hiện lên khi user bấm vào mục video
+      operationId: getVideoFirst
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+                
+  /videos/next:
+    get:
+      summary: Danh sách video
+      description: Danh sách video tiếp theo (Tương tự page /video trên website)
+      operationId: getVideosNext
+      parameters:
+        - name: video_id
+          in: query
+          description: Id của video hiện đang xem
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses: 
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoSummary'
+
+  /videos/newest:
+    get:
+      summary: Danh sách video
+      description: Danh sách video mới nhất (Tương tự page /video trên website). Thông tin trả ra không được trùng với phần video tiếp theo ở trên
+      operationId: getVideosNewest
+      parameters:
+        - name: video_id
+          in: query
+          description: Id của video hiện đang xem
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: number
+          in: query
+          description: Số lượng video muốn lấy trong 1 trang. Mặc định là 7
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start
+          in: query
+          description: Tham số để phân trang. Mặc định = 0
+          required: false
+          schema: 
+            type: integer
+            format: int32
+      responses: 
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoSummary'
+      
+components:
+  schemas:
+    Category:
+      type: object 
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Xã hội
+        level:
+          type: integer
+          description: Cấp độ của chuyên mục 0 - chuyên mục lớn gồm nhiều chuyên mục con 1 - chuyên mục con cấp 1     
+          example: 0
+        parent:
+          type: integer
+          description: Id của category cấp trên, =0 là không có category cấp trên
+          example: 1
+      xml:
+        name: category
+    CategoryWithSubCategories:
+      type: object 
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Xã hội
+        level:
+          type: integer
+          description: Cấp độ của chuyên mục 0 - chuyên mục lớn gồm nhiều chuyên mục con 1 - chuyên mục con cấp 1     
+          example: 0
+        parent:
+          type: integer
+          description: Id của category cấp trên, =0 là không có category cấp trên
+          example: 1
+        subcategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    ArticleSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Tiêu đề của bài báo
+        summary:
+          type: string
+          example: Tóm tắt của bài báo
+        thumbnail:
+          type: string
+          description: Với nội dung video thì thumbnail là ảnh jpg, png ko chạy được gif trên mobile. Url cho phép client tự lấy theo size mong muốn thì càng tốt.
+          example: Link ảnh minh hoạ bài báo
+        content_type:
+          type: string
+          description: text - Báo chữ, video - Nội dung video
+          example: text
+        time_publish:
+          type: integer
+          format: int64
+          description: Thời gian publish bài báo (timestamp seconds)
+          example: 12345
+        category:
+          $ref: '#/components/schemas/Category'
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Tiêu đề của bài báo
+        summary:
+          type: string
+          example: Tóm tắt của bài báo
+        thumbnail:
+          type: string
+          description: Với nội dung video thì thumbnail là ảnh jpg, png ko chạy được gif trên mobile. Url cho phép client tự lấy theo size mong muốn thì càng tốt.
+          example: Link ảnh minh hoạ bài báo
+        content_type:
+          type: string
+          description: text - Báo chữ, video - Nội dung video
+          example: text
+        time_publish:
+          type: integer
+          format: int64
+          description: Thời gian publish bài báo (timestamp seconds)
+          example: 12345
+        category:
+          $ref: '#/components/schemas/Category'
+        text:
+          type: string
+          example: Nội dung bài báo
+        video_url:
+          type: string
+          description: Link HLS .m3u8 (Nếu có)
+          example: https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8
+        author_page:
+          type: string
+          description: Link nguồn
+          example: https://vnexpress.net/page.html
+        web_link:
+          type: string
+          description: Link trên web, khi user muốn copy để chia sẻ qua email hoặc chat
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+    VideoSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Tiêu đề của bài báo
+        summary:
+          type: string
+          example: Tóm tắt của bài báo
+        thumbnail:
+          type: string
+          description: Với nội dung video thì thumbnail là ảnh jpg, png ko chạy được gif trên mobile. Url cho phép client tự lấy theo size mong muốn thì càng tốt.
+          example: Link ảnh minh hoạ bài báo
+        content_type:
+          type: string
+          description: video - Nội dung video
+          example: text
+        time_publish:
+          type: integer
+          format: int64
+          description: Thời gian publish bài báo (timestamp seconds)
+          example: 12345
+    Video:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Tiêu đề của bài báo
+        summary:
+          type: string
+          example: Tóm tắt của bài báo
+        thumbnail:
+          type: string
+          description: Với nội dung video thì thumbnail là ảnh jpg, png ko chạy được gif trên mobile. Url cho phép client tự lấy theo size mong muốn thì càng tốt.
+          example: Link ảnh minh hoạ bài báo
+        content_type:
+          type: string
+          description: video - Nội dung video
+          example: text
+        time_publish:
+          type: integer
+          format: int64
+          description: Thời gian publish bài báo (timestamp seconds)
+          example: 12345
+        text:
+          type: string
+          example: Nội dung bài báo
+        video_url:
+          type: string
+          description: Link HLS .m3u8
+          example: https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8
+        author_page:
+          type: string
+          description: Link nguồn
+          example: https://vnexpress.net/page.html
+        web_link:
+          type: string
+          description: Link trên web, khi user muốn copy để chia sẻ qua email hoặc chat
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: xe máy
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
