@@ -21,16 +21,6 @@ externalDocs:
 servers:
   - url: https://api.vietbao.vn/api/v1
 paths:
-  /home:
-    get:
-      summary: Home
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArticleSummary'
   /categories:
     get:
       summary: Lấy danh sách chuyên mục
