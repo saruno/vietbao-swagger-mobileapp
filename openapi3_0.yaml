@@ -176,6 +176,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Article'
+  
+  /articles/search:
+    get:
+      summary: Tìm kiếm theo từ khoá
+      description: Tìm kiếm danh sách bài báo theo từ khoá
+      operationId: searchArticles
+      parameters:
+        - name: keyword
+          in: query
+          description: Từ khoá tìm kiếm
+          required: true
+          schema:
+            type: string
+            example: xử án
+      responses: 
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleSummary'
+      
       
   /videos/hot:
     get:
