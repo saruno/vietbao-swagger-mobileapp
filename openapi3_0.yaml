@@ -19,7 +19,7 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  - url: https://api.vietbao.vn/api/v1
+  - url: https://vietbao.vn/api/v1
 paths:
   /categories:
     get:
