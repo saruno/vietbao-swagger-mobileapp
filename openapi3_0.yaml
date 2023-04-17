@@ -66,7 +66,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ArticleSummary'
 
-  /articles/category/{category_id}:
+  /articles/category/{category_id}/{number}/{start}:
     get:
       summary:  Lấy ds bài theo chủ đề
       description: Lấy danh sách bài báo theo từng chủ đề (Như trên web là sắp xếp theo mới nhất)
@@ -80,16 +80,16 @@ paths:
             type: integer
             format: int32
         - name: number
-          in: query
+          in: path
           description: Số lượng bài báo muốn lấy trong 1 trang. Mặc định là 7
-          required: false
+          required: true
           schema:
             type: integer
             format: int32
         - name: start
-          in: query
+          in: path
           description: Tham số để phân trang. Mặc định = 0. VD number = 7, start = 0 là lấy 7 bài đầu, start = 1 là lấy 7 bài thứ tự từ thứ 8 đến thứ tự thứ 14
-          required: false
+          required: true
           schema: 
             type: integer
             format: int32
@@ -126,23 +126,23 @@ paths:
                 items:
                   $ref: '#/components/schemas/ArticleSummary'
 
-  /articles/related:
+  /articles/related/{article_id}/{number}:
     get:
       summary: Lấy ds bài liên quan
       description: Lấy danh sách bài báo liên quan tới 1 bài báo
       operationId: getArticlesRelated
       parameters: 
         - name: article_id
-          in: query
+          in: path
           description: Id của bài báo
           required: true
           schema:
             type: integer
             format: int32
         - name: number
-          in: query
+          in: path
           description: Số lượng bài báo muốn lấy. Mặc định là 5.
-          required: false
+          required: true
           schema:
             type: integer
             format: int32  
@@ -183,7 +183,7 @@ paths:
       description: Tìm kiếm danh sách bài báo theo từ khoá
       operationId: searchArticles
       parameters:
-        - name: keyword
+        - name: q
           in: query
           description: Từ khoá tìm kiếm
           required: true
@@ -201,16 +201,16 @@ paths:
                   $ref: '#/components/schemas/ArticleSummary'
       
       
-  /videos/hot:
+  /videos/hot/{number}:
     get:
       summary: Danh sách video trên trang chủ
       description: Danh sách các video hot nhất hiển thị trên trang chủ
       operationId: getVideoHot
       parameters: 
         - name: number
-          in: query
+          in: path
           description: Số lượng video muốn lấy, mặc định là 5
-          required: false
+          required: true
           schema:
             type: integer
             format: int32
@@ -237,14 +237,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/Video'
                 
-  /videos/next:
+  /videos/next/{video_id}:
     get:
       summary: Danh sách video
       description: Danh sách video tiếp theo (Tương tự page /video trên website)
       operationId: getVideosNext
       parameters:
         - name: video_id
-          in: query
+          in: path
           description: Id của video hiện đang xem
           required: true
           schema:
@@ -260,30 +260,30 @@ paths:
                 items:
                   $ref: '#/components/schemas/VideoSummary'
 
-  /videos/newest:
+  /videos/newest/{video_id}/{number}/{start}:
     get:
       summary: Danh sách video
       description: Danh sách video mới nhất (Tương tự page /video trên website). Thông tin trả ra không được trùng với phần video tiếp theo ở trên
       operationId: getVideosNewest
       parameters:
         - name: video_id
-          in: query
+          in: path
           description: Id của video hiện đang xem
           required: true
           schema:
             type: integer
             format: int32
         - name: number
-          in: query
+          in: path
           description: Số lượng video muốn lấy trong 1 trang. Mặc định là 7
-          required: false
+          required: true
           schema:
             type: integer
             format: int32
         - name: start
-          in: query
+          in: path
           description: Tham số để phân trang. Mặc định = 0
-          required: false
+          required: true
           schema: 
             type: integer
             format: int32
