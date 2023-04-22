@@ -36,11 +36,26 @@ paths:
                 items:
                   $ref: '#/components/schemas/CategoryWithSubCategories'
 
-  /articles/hot:
+  /articles/hot/{number}/{start}:
     get:
       summary: Danh sách các bài báo hot
       description: Danh sách các bài báo hot nhất hiển thị ở đầu trang chủ. Bài ở đầu danh sách sẽ là tin nổi bật nhất hiển thị đầu tiên. Là content hiển thị ở giữa, bên trái và bên phải của trang trủ trên website
       operationId: getArticlesHot
+      parameters: 
+        - name: number
+          in: path
+          description: Số lượng bài báo muốn lấy trong 1 trang. Mặc định là 7
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: start
+          in: path
+          description: Tham số để phân trang. Mặc định = 0. VD number = 7, start = 0 là lấy 7 bài đầu, start = 1 là lấy 7 bài thứ tự từ thứ 8 đến thứ tự thứ 14
+          required: true
+          schema: 
+            type: integer
+            format: int32
       responses:
         '200':
           description: successful
@@ -51,11 +66,26 @@ paths:
                 items:
                   $ref: '#/components/schemas/ArticleSummary'
 
-  /articles/feature:
+  /articles/feature/{number}/{start}:
     get:
       summary: Tin Việt Báo Nổi Bật
       description: Danh sách các bài báo trong mục Tin Việt Báo Nổi Bật trên website
       operationId: getArticlesFeature
+      parameters: 
+        - name: number
+          in: path
+          description: Số lượng bài báo muốn lấy trong 1 trang. Mặc định là 7
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: start
+          in: path
+          description: Tham số để phân trang. Mặc định = 0. VD number = 7, start = 0 là lấy 7 bài đầu, start = 1 là lấy 7 bài thứ tự từ thứ 8 đến thứ tự thứ 14
+          required: true
+          schema: 
+            type: integer
+            format: int32
       responses:
         '200':
           description: successful
