@@ -186,7 +186,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ArticleSummary'
   
-  /article/{article_id}:
+  /articles/{article_id}:
     get:
       summary: Lấy chi tiết bài báo
       description: Lấy đầy đủ thông tin bài báo
@@ -259,6 +259,27 @@ paths:
       summary: Lấy video đầu tiên khi mở tab video
       description: Video đầu tiên hiện lên khi user bấm vào mục video
       operationId: getVideoFirst
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+                
+  /videos/{video_id}:
+    get:
+      summary: Lấy thông tin chi tiết của video
+      description: Lấy thông tin chi tiết của video để hiển thị lên cho user
+      operationId: getVideo
+      parameters:
+        - name: video_id
+          in: path
+          description: Id của video hiện đang xem
+          required: true
+          schema:
+            type: integer
+            format: int32
       responses:
         '200':
           description: successful
